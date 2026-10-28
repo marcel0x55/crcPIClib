@@ -1,0 +1,869 @@
+gpasm-1.5.2 #1325 (Jul 12 2024) crc16_Clib.as   10/28/2026  05:58:31 PM     PAGE  1
+
+
+LOC    OBJECT CODE    LINE  SOURCE TEXT
+  VALUE
+
+                      00001 #include "p16f690.inc"
+                      00001         LIST
+                      00002 
+                      00003 ;==========================================================================
+                      00004 ; Build date : Oct 21 2015
+                      00005 ;  MPASM PIC16F690 processor include
+                      00006 ; 
+                      00007 ;  (c) Copyright 1999-2015 Microchip Technology, All rights reserved
+                      00008 ;==========================================================================
+                      00009 
+                      00757         LIST
+                      00002 
+                      00003 ;CONSTS
+  00000021            00004 POLYLOW EQU 0X21
+  00000010            00005 POLYHIGH EQU 0X10   ;CRC16 POLYNOMIAL VALUE
+                      00006  
+  000000FF            00007 INITLOW EQU 0XFF
+  000000FF            00008 INITHIGH EQU 0XFF   ;CRCSUM INIT VALUE
+                      00009 
+                      00010 
+Warning[205]: Found directive in column 1: "GLOBAL"
+  0000                00011 GLOBAL _CRC16
+                      00012 
+Warning[205]: Found directive in column 1: "EXTERN"
+  0000                00013 EXTERN _CRCSUM
+Warning[205]: Found directive in column 1: "EXTERN"
+  0000                00014 EXTERN _DATAADDR
+Warning[205]: Found directive in column 1: "EXTERN"
+  0000                00015 EXTERN _BYTENUM
+                      00016 
+                      00017 PROG CODE
+                      00018 
+0000                  00019 _CRC16:
+0000   1283           00020         BCF STATUS, RP0
+0001   1303           00021         BCF STATUS, RP1
+0002   08??           00022         MOVF _BYTENUM, W
+0003   07??           00023         ADDWF _DATAADDR, W
+0004   0084           00024         MOVWF FSR
+                      00025     
+0005   30FF           00026         MOVLW INITLOW
+0006   00??           00027         MOVWF _CRCSUM
+0007   30FF           00028         MOVLW INITHIGH
+0008   00??           00029         MOVWF _CRCSUM+1
+                      00030     
+0009                  00031 BYTELOOP:
+0009   0800           00032         MOVF INDF,W
+000A   06??           00033         XORWF _CRCSUM+1,F
+000B   2???           00034         CALL PROCESSBITS
+000C   0304           00035         DECF FSR,W
+000D   0084           00036         MOVWF FSR
+000E   02??           00037         SUBWF _DATAADDR,W
+000F   3C00           00038         SUBLW 0X00
+0010   3E01           00039         ADDLW 0x01
+gpasm-1.5.2 #1325 (Jul 12 2024) crc16_Clib.as   10/28/2026  05:58:31 PM     PAGE  2
+
+
+LOC    OBJECT CODE    LINE  SOURCE TEXT
+  VALUE
+
+0011   1D03           00040         BTFSS STATUS,Z
+0012   2???           00041         GOTO BYTELOOP
+                      00042     
+0013   0008           00043         RETURN
+                      00044 
+0014                  00045 PROCESSBITS:   
+0014   1F??           00046         BTFSS _CRCSUM+1,7
+0015   2???           00047         GOTO MSBC0
+                      00048     
+0016   1003           00049         BCF STATUS,C
+0017   0D??           00050         RLF _CRCSUM,F
+0018   0D??           00051         RLF _CRCSUM+1,F
+0019   1003           00052         BCF STATUS,C
+                      00053     
+001A   3021           00054         MOVLW POLYLOW
+001B   06??           00055         XORWF _CRCSUM,F
+001C   3010           00056         MOVLW POLYHIGH
+001D   06??           00057         XORWF _CRCSUM+1,F
+                      00058     
+001E   2???           00059         GOTO DONEMSBS0
+                      00060     
+001F                  00061 MSBC0:
+001F   1003           00062         BCF STATUS,C
+0020   0D??           00063         RLF _CRCSUM,F
+0021   0D??           00064         RLF _CRCSUM+1,F
+                      00065 
+0022                  00066 DONEMSBS0:
+                      00067 
+0022   1F??           00068         BTFSS _CRCSUM+1,7
+0023   2???           00069         GOTO MSBC1
+                      00070     
+0024   1003           00071         BCF STATUS,C
+0025   0D??           00072         RLF _CRCSUM,F
+0026   0D??           00073         RLF _CRCSUM+1,F
+0027   1003           00074         BCF STATUS,C
+                      00075     
+0028   3021           00076         MOVLW POLYLOW
+0029   06??           00077         XORWF _CRCSUM,F
+002A   3010           00078         MOVLW POLYHIGH
+002B   06??           00079         XORWF _CRCSUM+1,F
+                      00080     
+002C   2???           00081         GOTO DONEMSBS1
+                      00082     
+002D                  00083 MSBC1:
+002D   1003           00084         BCF STATUS,C
+002E   0D??           00085         RLF _CRCSUM,F
+002F   0D??           00086         RLF _CRCSUM+1,F
+                      00087 
+0030                  00088 DONEMSBS1:
+                      00089 
+0030   1F??           00090         BTFSS _CRCSUM+1,7
+0031   2???           00091         GOTO MSBC2
+                      00092     
+gpasm-1.5.2 #1325 (Jul 12 2024) crc16_Clib.as   10/28/2026  05:58:31 PM     PAGE  3
+
+
+LOC    OBJECT CODE    LINE  SOURCE TEXT
+  VALUE
+
+0032   1003           00093         BCF STATUS,C
+0033   0D??           00094         RLF _CRCSUM,F
+0034   0D??           00095         RLF _CRCSUM+1,F
+0035   1003           00096         BCF STATUS,C
+                      00097     
+0036   3021           00098         MOVLW POLYLOW
+0037   06??           00099         XORWF _CRCSUM,F
+0038   3010           00100         MOVLW POLYHIGH
+0039   06??           00101         XORWF _CRCSUM+1,F
+                      00102     
+003A   2???           00103         GOTO DONEMSBS2
+                      00104     
+003B                  00105 MSBC2:
+003B   1003           00106         BCF STATUS,C
+003C   0D??           00107         RLF _CRCSUM,F
+003D   0D??           00108         RLF _CRCSUM+1,F
+                      00109 
+003E                  00110 DONEMSBS2:
+                      00111 
+003E   1F??           00112         BTFSS _CRCSUM+1,7
+003F   2???           00113         GOTO MSBC3
+                      00114     
+0040   1003           00115         BCF STATUS,C
+0041   0D??           00116         RLF _CRCSUM,F
+0042   0D??           00117         RLF _CRCSUM+1,F
+0043   1003           00118         BCF STATUS,C
+                      00119     
+0044   3021           00120         MOVLW POLYLOW
+0045   06??           00121         XORWF _CRCSUM,F
+0046   3010           00122         MOVLW POLYHIGH
+0047   06??           00123         XORWF _CRCSUM+1,F
+                      00124     
+0048   2???           00125         GOTO DONEMSBS3
+                      00126     
+0049                  00127 MSBC3:
+0049   1003           00128         BCF STATUS,C
+004A   0D??           00129         RLF _CRCSUM,F
+004B   0D??           00130         RLF _CRCSUM+1,F
+                      00131 
+004C                  00132 DONEMSBS3:
+                      00133 
+004C   1F??           00134         BTFSS _CRCSUM+1,7
+004D   2???           00135         GOTO MSBC4
+                      00136     
+004E   1003           00137         BCF STATUS,C
+004F   0D??           00138         RLF _CRCSUM,F
+0050   0D??           00139         RLF _CRCSUM+1,F
+0051   1003           00140         BCF STATUS,C
+                      00141     
+0052   3021           00142         MOVLW POLYLOW
+0053   06??           00143         XORWF _CRCSUM,F
+0054   3010           00144         MOVLW POLYHIGH
+0055   06??           00145         XORWF _CRCSUM+1,F
+gpasm-1.5.2 #1325 (Jul 12 2024) crc16_Clib.as   10/28/2026  05:58:31 PM     PAGE  4
+
+
+LOC    OBJECT CODE    LINE  SOURCE TEXT
+  VALUE
+
+                      00146     
+0056   2???           00147         GOTO DONEMSBS4
+                      00148     
+0057                  00149 MSBC4:
+0057   1003           00150         BCF STATUS,C
+0058   0D??           00151         RLF _CRCSUM,F
+0059   0D??           00152         RLF _CRCSUM+1,F
+                      00153 
+005A                  00154 DONEMSBS4:
+                      00155 
+005A   1F??           00156         BTFSS _CRCSUM+1,7
+005B   2???           00157         GOTO MSBC5
+                      00158     
+005C   1003           00159         BCF STATUS,C
+005D   0D??           00160         RLF _CRCSUM,F
+005E   0D??           00161         RLF _CRCSUM+1,F
+005F   1003           00162         BCF STATUS,C
+                      00163     
+0060   3021           00164         MOVLW POLYLOW
+0061   06??           00165         XORWF _CRCSUM,F
+0062   3010           00166         MOVLW POLYHIGH
+0063   06??           00167         XORWF _CRCSUM+1,F
+                      00168     
+0064   2???           00169         GOTO DONEMSBS5
+                      00170     
+0065                  00171 MSBC5:
+0065   1003           00172         BCF STATUS,C
+0066   0D??           00173         RLF _CRCSUM,F
+0067   0D??           00174         RLF _CRCSUM+1,F
+                      00175 
+0068                  00176 DONEMSBS5:
+                      00177 
+0068   1F??           00178         BTFSS _CRCSUM+1,7
+0069   2???           00179         GOTO MSBC6
+                      00180     
+006A   1003           00181         BCF STATUS,C
+006B   0D??           00182         RLF _CRCSUM,F
+006C   0D??           00183         RLF _CRCSUM+1,F
+006D   1003           00184         BCF STATUS,C
+                      00185     
+006E   3021           00186         MOVLW POLYLOW
+006F   06??           00187         XORWF _CRCSUM,F
+0070   3010           00188         MOVLW POLYHIGH
+0071   06??           00189         XORWF _CRCSUM+1,F
+                      00190     
+0072   2???           00191         GOTO DONEMSBS6
+                      00192     
+0073                  00193 MSBC6:
+0073   1003           00194         BCF STATUS,C
+0074   0D??           00195         RLF _CRCSUM,F
+0075   0D??           00196         RLF _CRCSUM+1,F
+                      00197 
+0076                  00198 DONEMSBS6:
+gpasm-1.5.2 #1325 (Jul 12 2024) crc16_Clib.as   10/28/2026  05:58:31 PM     PAGE  5
+
+
+LOC    OBJECT CODE    LINE  SOURCE TEXT
+  VALUE
+
+                      00199 
+0076   1F??           00200         BTFSS _CRCSUM+1,7
+0077   2???           00201         GOTO MSBC7
+                      00202     
+0078   1003           00203         BCF STATUS,C
+0079   0D??           00204         RLF _CRCSUM,F
+007A   0D??           00205         RLF _CRCSUM+1,F
+007B   1003           00206         BCF STATUS,C
+                      00207     
+007C   3021           00208         MOVLW POLYLOW
+007D   06??           00209         XORWF _CRCSUM,F
+007E   3010           00210         MOVLW POLYHIGH
+007F   06??           00211         XORWF _CRCSUM+1,F
+                      00212     
+0080   2???           00213         GOTO DONEMSBS7
+                      00214     
+0081                  00215 MSBC7:
+0081   1003           00216         BCF STATUS,C
+0082   0D??           00217         RLF _CRCSUM,F
+0083   0D??           00218         RLF _CRCSUM+1,F
+                      00219 
+0084                  00220 DONEMSBS7:
+                      00221         
+0084   0008           00222         RETURN
+                      00223     
+                      00224         END
+gpasm-1.5.2 #1325 (Jul 12 2024) crc16_Clib.as   10/28/2026  05:58:31 PM     PAGE  6
+
+
+SYMBOL TABLE
+  LABEL                              TYPE        VALUE         VALUE          VALUE
+                                                 (hex)         (dec)          (text)
+
+ABDEN                             CONSTANT      00000000              0
+ABDOVF                            CONSTANT      00000007              7
+ADCON0                            CONSTANT      0000001F             31
+ADCON1                            CONSTANT      0000009F            159
+ADCS0                             CONSTANT      00000004              4
+ADCS1                             CONSTANT      00000005              5
+ADCS2                             CONSTANT      00000006              6
+ADDEN                             CONSTANT      00000003              3
+ADFM                              CONSTANT      00000007              7
+ADIE                              CONSTANT      00000006              6
+ADIF                              CONSTANT      00000006              6
+ADON                              CONSTANT      00000000              0
+ADRESH                            CONSTANT      0000001E             30
+ADRESL                            CONSTANT      0000009E            158
+ANS0                              CONSTANT      00000000              0
+ANS1                              CONSTANT      00000001              1
+ANS2                              CONSTANT      00000002              2
+ANS3                              CONSTANT      00000003              3
+ANS4                              CONSTANT      00000004              4
+ANS5                              CONSTANT      00000005              5
+ANS6                              CONSTANT      00000006              6
+ANS7                              CONSTANT      00000007              7
+ANS8                              CONSTANT      00000000              0
+ANS9                              CONSTANT      00000001              1
+ANS10                             CONSTANT      00000002              2
+ANS11                             CONSTANT      00000003              3
+ANSEL                             CONSTANT      0000011E            286
+ANSELH                            CONSTANT      0000011F            287
+BAUDCTL                           CONSTANT      0000009B            155
+BF                                CONSTANT      00000000              0
+BRG0                              CONSTANT      00000000              0
+BRG1                              CONSTANT      00000001              1
+BRG2                              CONSTANT      00000002              2
+BRG3                              CONSTANT      00000003              3
+BRG4                              CONSTANT      00000004              4
+BRG5                              CONSTANT      00000005              5
+BRG6                              CONSTANT      00000006              6
+BRG7                              CONSTANT      00000007              7
+BRG8                              CONSTANT      00000000              0
+BRG9                              CONSTANT      00000001              1
+BRG10                             CONSTANT      00000002              2
+BRG11                             CONSTANT      00000003              3
+BRG12                             CONSTANT      00000004              4
+BRG13                             CONSTANT      00000005              5
+BRG14                             CONSTANT      00000006              6
+BRG15                             CONSTANT      00000007              7
+BRG16                             CONSTANT      00000003              3
+BRGH                              CONSTANT      00000002              2
+BYTELOOP                          ADDRESS       00000009              9
+C                                 CONSTANT      00000000              0
+C1CH0                             CONSTANT      00000000              0
+C1CH1                             CONSTANT      00000001              1
+gpasm-1.5.2 #1325 (Jul 12 2024) crc16_Clib.as   10/28/2026  05:58:31 PM     PAGE  7
+
+
+SYMBOL TABLE
+  LABEL                              TYPE        VALUE         VALUE          VALUE
+                                                 (hex)         (dec)          (text)
+
+C1IE                              CONSTANT      00000005              5
+C1IF                              CONSTANT      00000005              5
+C1OE                              CONSTANT      00000005              5
+C1ON                              CONSTANT      00000007              7
+C1OUT                             CONSTANT      00000006              6
+C1POL                             CONSTANT      00000004              4
+C1R                               CONSTANT      00000002              2
+C1SEN                             CONSTANT      00000005              5
+C1VREN                            CONSTANT      00000007              7
+C2CH0                             CONSTANT      00000000              0
+C2CH1                             CONSTANT      00000001              1
+C2IE                              CONSTANT      00000006              6
+C2IF                              CONSTANT      00000006              6
+C2OE                              CONSTANT      00000005              5
+C2ON                              CONSTANT      00000007              7
+C2OUT                             CONSTANT      00000006              6
+C2POL                             CONSTANT      00000004              4
+C2R                               CONSTANT      00000002              2
+C2REN                             CONSTANT      00000004              4
+C2SYNC                            CONSTANT      00000000              0
+C2VREN                            CONSTANT      00000006              6
+CCP1CON                           CONSTANT      00000017             23
+CCP1IE                            CONSTANT      00000002              2
+CCP1IF                            CONSTANT      00000002              2
+CCP1M0                            CONSTANT      00000000              0
+CCP1M1                            CONSTANT      00000001              1
+CCP1M2                            CONSTANT      00000002              2
+CCP1M3                            CONSTANT      00000003              3
+CCPR                              CONSTANT      00000015             21
+CCPR1H                            CONSTANT      00000016             22
+CCPR1L                            CONSTANT      00000015             21
+CHS0                              CONSTANT      00000002              2
+CHS1                              CONSTANT      00000003              3
+CHS2                              CONSTANT      00000004              4
+CHS3                              CONSTANT      00000005              5
+CKE                               CONSTANT      00000006              6
+CKP                               CONSTANT      00000004              4
+CM1CON0                           CONSTANT      00000119            281
+CM2CON0                           CONSTANT      0000011A            282
+CM2CON1                           CONSTANT      0000011B            283
+CREN                              CONSTANT      00000004              4
+CSRC                              CONSTANT      00000007              7
+D                                 CONSTANT      00000005              5
+DATA_ADDRESS                      CONSTANT      00000005              5
+DC                                CONSTANT      00000001              1
+DC1B0                             CONSTANT      00000004              4
+DC1B1                             CONSTANT      00000005              5
+DONEMSBS0                         ADDRESS       00000022             34
+DONEMSBS1                         ADDRESS       00000030             48
+DONEMSBS2                         ADDRESS       0000003E             62
+DONEMSBS3                         ADDRESS       0000004C             76
+DONEMSBS4                         ADDRESS       0000005A             90
+gpasm-1.5.2 #1325 (Jul 12 2024) crc16_Clib.as   10/28/2026  05:58:31 PM     PAGE  8
+
+
+SYMBOL TABLE
+  LABEL                              TYPE        VALUE         VALUE          VALUE
+                                                 (hex)         (dec)          (text)
+
+DONEMSBS5                         ADDRESS       00000068            104
+DONEMSBS6                         ADDRESS       00000076            118
+DONEMSBS7                         ADDRESS       00000084            132
+D_A                               CONSTANT      00000005              5
+D_NOT_A                           CONSTANT      00000005              5
+ECCPAS                            CONSTANT      0000001D             29
+ECCPAS0                           CONSTANT      00000004              4
+ECCPAS1                           CONSTANT      00000005              5
+ECCPAS2                           CONSTANT      00000006              6
+ECCPASE                           CONSTANT      00000007              7
+EEADR                             CONSTANT      0000010D            269
+EEADRH                            CONSTANT      0000010F            271
+EECON1                            CONSTANT      0000018C            396
+EECON2                            CONSTANT      0000018D            397
+EEDAT                             CONSTANT      0000010C            268
+EEDATA                            CONSTANT      0000010C            268
+EEDATH                            CONSTANT      0000010E            270
+EEIE                              CONSTANT      00000004              4
+EEIF                              CONSTANT      00000004              4
+EEPGD                             CONSTANT      00000007              7
+F                                 CONSTANT      00000001              1
+FERR                              CONSTANT      00000002              2
+FSR                               CONSTANT      00000004              4
+GIE                               CONSTANT      00000007              7
+GO                                CONSTANT      00000001              1
+GO_DONE                           CONSTANT      00000001              1
+GO_NOT_DONE                       CONSTANT      00000001              1
+HTS                               CONSTANT      00000002              2
+I2C_DATA                          CONSTANT      00000005              5
+I2C_READ                          CONSTANT      00000002              2
+I2C_START                         CONSTANT      00000003              3
+I2C_STOP                          CONSTANT      00000004              4
+INDF                              CONSTANT      00000000              0
+INITHIGH                          CONSTANT      000000FF            255
+INITLOW                           CONSTANT      000000FF            255
+INTCON                            CONSTANT      0000000B             11
+INTE                              CONSTANT      00000004              4
+INTEDG                            CONSTANT      00000006              6
+INTF                              CONSTANT      00000001              1
+IOC                               CONSTANT      00000096            150
+IOC0                              CONSTANT      00000000              0
+IOC1                              CONSTANT      00000001              1
+IOC2                              CONSTANT      00000002              2
+IOC3                              CONSTANT      00000003              3
+IOC4                              CONSTANT      00000004              4
+IOC5                              CONSTANT      00000005              5
+IOCA                              CONSTANT      00000096            150
+IOCA0                             CONSTANT      00000000              0
+IOCA1                             CONSTANT      00000001              1
+IOCA2                             CONSTANT      00000002              2
+IOCA3                             CONSTANT      00000003              3
+IOCA4                             CONSTANT      00000004              4
+gpasm-1.5.2 #1325 (Jul 12 2024) crc16_Clib.as   10/28/2026  05:58:31 PM     PAGE  9
+
+
+SYMBOL TABLE
+  LABEL                              TYPE        VALUE         VALUE          VALUE
+                                                 (hex)         (dec)          (text)
+
+IOCA5                             CONSTANT      00000005              5
+IOCB                              CONSTANT      00000116            278
+IOCB4                             CONSTANT      00000004              4
+IOCB5                             CONSTANT      00000005              5
+IOCB6                             CONSTANT      00000006              6
+IOCB7                             CONSTANT      00000007              7
+IRCF0                             CONSTANT      00000004              4
+IRCF1                             CONSTANT      00000005              5
+IRCF2                             CONSTANT      00000006              6
+IRP                               CONSTANT      00000007              7
+LTS                               CONSTANT      00000001              1
+MC1OUT                            CONSTANT      00000007              7
+MC2OUT                            CONSTANT      00000006              6
+MSBC0                             ADDRESS       0000001F             31
+MSBC1                             ADDRESS       0000002D             45
+MSBC2                             ADDRESS       0000003B             59
+MSBC3                             ADDRESS       00000049             73
+MSBC4                             ADDRESS       00000057             87
+MSBC5                             ADDRESS       00000065            101
+MSBC6                             ADDRESS       00000073            115
+MSBC7                             ADDRESS       00000081            129
+MSK                               CONSTANT      00000093            147
+MSK0                              CONSTANT      00000000              0
+MSK1                              CONSTANT      00000001              1
+MSK2                              CONSTANT      00000002              2
+MSK3                              CONSTANT      00000003              3
+MSK4                              CONSTANT      00000004              4
+MSK5                              CONSTANT      00000005              5
+MSK6                              CONSTANT      00000006              6
+MSK7                              CONSTANT      00000007              7
+NOT_A                             CONSTANT      00000005              5
+NOT_ADDRESS                       CONSTANT      00000005              5
+NOT_BOR                           CONSTANT      00000000              0
+NOT_DONE                          CONSTANT      00000001              1
+NOT_PD                            CONSTANT      00000003              3
+NOT_POR                           CONSTANT      00000001              1
+NOT_RABPU                         CONSTANT      00000007              7
+NOT_T1SYNC                        CONSTANT      00000002              2
+NOT_TO                            CONSTANT      00000004              4
+NOT_W                             CONSTANT      00000002              2
+NOT_WRITE                         CONSTANT      00000002              2
+OERR                              CONSTANT      00000001              1
+OPTION_REG                        CONSTANT      00000081            129
+OSCCON                            CONSTANT      0000008F            143
+OSCTUNE                           CONSTANT      00000090            144
+OSFIE                             CONSTANT      00000007              7
+OSFIF                             CONSTANT      00000007              7
+OSTS                              CONSTANT      00000003              3
+P                                 CONSTANT      00000004              4
+P1M0                              CONSTANT      00000006              6
+P1M1                              CONSTANT      00000007              7
+PCL                               CONSTANT      00000002              2
+gpasm-1.5.2 #1325 (Jul 12 2024) crc16_Clib.as   10/28/2026  05:58:31 PM     PAGE 10
+
+
+SYMBOL TABLE
+  LABEL                              TYPE        VALUE         VALUE          VALUE
+                                                 (hex)         (dec)          (text)
+
+PCLATH                            CONSTANT      0000000A             10
+PCON                              CONSTANT      0000008E            142
+PDC0                              CONSTANT      00000000              0
+PDC1                              CONSTANT      00000001              1
+PDC2                              CONSTANT      00000002              2
+PDC3                              CONSTANT      00000003              3
+PDC4                              CONSTANT      00000004              4
+PDC5                              CONSTANT      00000005              5
+PDC6                              CONSTANT      00000006              6
+PEIE                              CONSTANT      00000006              6
+PIE1                              CONSTANT      0000008C            140
+PIE2                              CONSTANT      0000008D            141
+PIR1                              CONSTANT      0000000C             12
+PIR2                              CONSTANT      0000000D             13
+POLYHIGH                          CONSTANT      00000010             16
+POLYLOW                           CONSTANT      00000021             33
+PORTA                             CONSTANT      00000005              5
+PORTB                             CONSTANT      00000006              6
+PORTC                             CONSTANT      00000007              7
+PR2                               CONSTANT      00000092            146
+PROCESSBITS                       ADDRESS       00000014             20
+PRSEN                             CONSTANT      00000007              7
+PS0                               CONSTANT      00000000              0
+PS1                               CONSTANT      00000001              1
+PS2                               CONSTANT      00000002              2
+PSA                               CONSTANT      00000003              3
+PSSAC0                            CONSTANT      00000002              2
+PSSAC1                            CONSTANT      00000003              3
+PSSBD0                            CONSTANT      00000000              0
+PSSBD1                            CONSTANT      00000001              1
+PSTRCON                           CONSTANT      0000019D            413
+PULSR                             CONSTANT      00000002              2
+PULSS                             CONSTANT      00000003              3
+PWM1CON                           CONSTANT      0000001C             28
+R                                 CONSTANT      00000002              2
+RA0                               CONSTANT      00000000              0
+RA1                               CONSTANT      00000001              1
+RA2                               CONSTANT      00000002              2
+RA3                               CONSTANT      00000003              3
+RA4                               CONSTANT      00000004              4
+RA5                               CONSTANT      00000005              5
+RABIE                             CONSTANT      00000003              3
+RABIF                             CONSTANT      00000000              0
+RB4                               CONSTANT      00000004              4
+RB5                               CONSTANT      00000005              5
+RB6                               CONSTANT      00000006              6
+RB7                               CONSTANT      00000007              7
+RC0                               CONSTANT      00000000              0
+RC1                               CONSTANT      00000001              1
+RC2                               CONSTANT      00000002              2
+RC3                               CONSTANT      00000003              3
+RC4                               CONSTANT      00000004              4
+gpasm-1.5.2 #1325 (Jul 12 2024) crc16_Clib.as   10/28/2026  05:58:31 PM     PAGE 11
+
+
+SYMBOL TABLE
+  LABEL                              TYPE        VALUE         VALUE          VALUE
+                                                 (hex)         (dec)          (text)
+
+RC5                               CONSTANT      00000005              5
+RC6                               CONSTANT      00000006              6
+RC7                               CONSTANT      00000007              7
+RCIDL                             CONSTANT      00000006              6
+RCIE                              CONSTANT      00000005              5
+RCIF                              CONSTANT      00000005              5
+RCREG                             CONSTANT      0000001A             26
+RCSTA                             CONSTANT      00000018             24
+RD                                CONSTANT      00000000              0
+READ_WRITE                        CONSTANT      00000002              2
+RP0                               CONSTANT      00000005              5
+RP1                               CONSTANT      00000006              6
+RX9                               CONSTANT      00000006              6
+RX9D                              CONSTANT      00000000              0
+R_NOT_W                           CONSTANT      00000002              2
+R_W                               CONSTANT      00000002              2
+S                                 CONSTANT      00000003              3
+SBOREN                            CONSTANT      00000004              4
+SCKP                              CONSTANT      00000004              4
+SCS                               CONSTANT      00000000              0
+SENB                              CONSTANT      00000003              3
+SENDB                             CONSTANT      00000003              3
+SMP                               CONSTANT      00000007              7
+SPBRG                             CONSTANT      00000099            153
+SPBRGH                            CONSTANT      0000009A            154
+SPEN                              CONSTANT      00000007              7
+SR0                               CONSTANT      00000006              6
+SR1                               CONSTANT      00000007              7
+SRCON                             CONSTANT      0000019E            414
+SREN                              CONSTANT      00000005              5
+SSPADD                            CONSTANT      00000093            147
+SSPBUF                            CONSTANT      00000013             19
+SSPCON                            CONSTANT      00000014             20
+SSPEN                             CONSTANT      00000005              5
+SSPIE                             CONSTANT      00000003              3
+SSPIF                             CONSTANT      00000003              3
+SSPM0                             CONSTANT      00000000              0
+SSPM1                             CONSTANT      00000001              1
+SSPM2                             CONSTANT      00000002              2
+SSPM3                             CONSTANT      00000003              3
+SSPMSK                            CONSTANT      00000093            147
+SSPOV                             CONSTANT      00000006              6
+SSPSTAT                           CONSTANT      00000094            148
+STATUS                            CONSTANT      00000003              3
+STRA                              CONSTANT      00000000              0
+STRB                              CONSTANT      00000001              1
+STRC                              CONSTANT      00000002              2
+STRD                              CONSTANT      00000003              3
+STRSYNC                           CONSTANT      00000004              4
+SWDTEN                            CONSTANT      00000000              0
+SYNC                              CONSTANT      00000004              4
+T0CS                              CONSTANT      00000005              5
+gpasm-1.5.2 #1325 (Jul 12 2024) crc16_Clib.as   10/28/2026  05:58:31 PM     PAGE 12
+
+
+SYMBOL TABLE
+  LABEL                              TYPE        VALUE         VALUE          VALUE
+                                                 (hex)         (dec)          (text)
+
+T0IE                              CONSTANT      00000005              5
+T0IF                              CONSTANT      00000002              2
+T0SE                              CONSTANT      00000004              4
+T1CKPS0                           CONSTANT      00000004              4
+T1CKPS1                           CONSTANT      00000005              5
+T1CON                             CONSTANT      00000010             16
+T1GINV                            CONSTANT      00000007              7
+T1GSS                             CONSTANT      00000001              1
+T1IE                              CONSTANT      00000000              0
+T1IF                              CONSTANT      00000000              0
+T1OSCEN                           CONSTANT      00000003              3
+T2CKPS0                           CONSTANT      00000000              0
+T2CKPS1                           CONSTANT      00000001              1
+T2CON                             CONSTANT      00000012             18
+T2IE                              CONSTANT      00000001              1
+T2IF                              CONSTANT      00000001              1
+TMR0                              CONSTANT      00000001              1
+TMR1                              CONSTANT      0000000E             14
+TMR1CS                            CONSTANT      00000001              1
+TMR1GE                            CONSTANT      00000006              6
+TMR1H                             CONSTANT      0000000F             15
+TMR1IE                            CONSTANT      00000000              0
+TMR1IF                            CONSTANT      00000000              0
+TMR1L                             CONSTANT      0000000E             14
+TMR1ON                            CONSTANT      00000000              0
+TMR2                              CONSTANT      00000011             17
+TMR2IE                            CONSTANT      00000001              1
+TMR2IF                            CONSTANT      00000001              1
+TMR2ON                            CONSTANT      00000002              2
+TOUTPS0                           CONSTANT      00000003              3
+TOUTPS1                           CONSTANT      00000004              4
+TOUTPS2                           CONSTANT      00000005              5
+TOUTPS3                           CONSTANT      00000006              6
+TRISA                             CONSTANT      00000085            133
+TRISA0                            CONSTANT      00000000              0
+TRISA1                            CONSTANT      00000001              1
+TRISA2                            CONSTANT      00000002              2
+TRISA3                            CONSTANT      00000003              3
+TRISA4                            CONSTANT      00000004              4
+TRISA5                            CONSTANT      00000005              5
+TRISB                             CONSTANT      00000086            134
+TRISB4                            CONSTANT      00000004              4
+TRISB5                            CONSTANT      00000005              5
+TRISB6                            CONSTANT      00000006              6
+TRISB7                            CONSTANT      00000007              7
+TRISC                             CONSTANT      00000087            135
+TRISC0                            CONSTANT      00000000              0
+TRISC1                            CONSTANT      00000001              1
+TRISC2                            CONSTANT      00000002              2
+TRISC3                            CONSTANT      00000003              3
+TRISC4                            CONSTANT      00000004              4
+TRISC5                            CONSTANT      00000005              5
+gpasm-1.5.2 #1325 (Jul 12 2024) crc16_Clib.as   10/28/2026  05:58:31 PM     PAGE 13
+
+
+SYMBOL TABLE
+  LABEL                              TYPE        VALUE         VALUE          VALUE
+                                                 (hex)         (dec)          (text)
+
+TRISC6                            CONSTANT      00000006              6
+TRISC7                            CONSTANT      00000007              7
+TRMT                              CONSTANT      00000001              1
+TUN0                              CONSTANT      00000000              0
+TUN1                              CONSTANT      00000001              1
+TUN2                              CONSTANT      00000002              2
+TUN3                              CONSTANT      00000003              3
+TUN4                              CONSTANT      00000004              4
+TX9                               CONSTANT      00000006              6
+TX9D                              CONSTANT      00000000              0
+TXEN                              CONSTANT      00000005              5
+TXIE                              CONSTANT      00000004              4
+TXIF                              CONSTANT      00000004              4
+TXREG                             CONSTANT      00000019             25
+TXSTA                             CONSTANT      00000098            152
+UA                                CONSTANT      00000001              1
+ULPWUE                            CONSTANT      00000005              5
+VCFG                              CONSTANT      00000006              6
+VP6EN                             CONSTANT      00000004              4
+VR0                               CONSTANT      00000000              0
+VR1                               CONSTANT      00000001              1
+VR2                               CONSTANT      00000002              2
+VR3                               CONSTANT      00000003              3
+VRCON                             CONSTANT      00000118            280
+VRR                               CONSTANT      00000005              5
+W                                 CONSTANT      00000000              0
+WCOL                              CONSTANT      00000007              7
+WDTCON                            CONSTANT      00000097            151
+WDTPS0                            CONSTANT      00000001              1
+WDTPS1                            CONSTANT      00000002              2
+WDTPS2                            CONSTANT      00000003              3
+WDTPS3                            CONSTANT      00000004              4
+WPU                               CONSTANT      00000095            149
+WPU0                              CONSTANT      00000000              0
+WPU1                              CONSTANT      00000001              1
+WPU2                              CONSTANT      00000002              2
+WPU4                              CONSTANT      00000004              4
+WPU5                              CONSTANT      00000005              5
+WPUA                              CONSTANT      00000095            149
+WPUA0                             CONSTANT      00000000              0
+WPUA1                             CONSTANT      00000001              1
+WPUA2                             CONSTANT      00000002              2
+WPUA4                             CONSTANT      00000004              4
+WPUA5                             CONSTANT      00000005              5
+WPUB                              CONSTANT      00000115            277
+WPUB4                             CONSTANT      00000004              4
+WPUB5                             CONSTANT      00000005              5
+WPUB6                             CONSTANT      00000006              6
+WPUB7                             CONSTANT      00000007              7
+WR                                CONSTANT      00000001              1
+WREN                              CONSTANT      00000002              2
+WRERR                             CONSTANT      00000003              3
+gpasm-1.5.2 #1325 (Jul 12 2024) crc16_Clib.as   10/28/2026  05:58:31 PM     PAGE 14
+
+
+SYMBOL TABLE
+  LABEL                              TYPE        VALUE         VALUE          VALUE
+                                                 (hex)         (dec)          (text)
+
+WUE                               CONSTANT      00000001              1
+Z                                 CONSTANT      00000002              2
+_BOD_NSLEEP                       CONSTANT      00003EFF          16127
+_BOD_OFF                          CONSTANT      00003CFF          15615
+_BOD_ON                           CONSTANT      00003FFF          16383
+_BOD_SBODEN                       CONSTANT      00003DFF          15871
+_BOREN_NSLEEP                     CONSTANT      00003EFF          16127
+_BOREN_OFF                        CONSTANT      00003CFF          15615
+_BOREN_ON                         CONSTANT      00003FFF          16383
+_BOREN_SBODEN                     CONSTANT      00003DFF          15871
+_BOR_NSLEEP                       CONSTANT      00003EFF          16127
+_BOR_OFF                          CONSTANT      00003CFF          15615
+_BOR_ON                           CONSTANT      00003FFF          16383
+_BOR_SBODEN                       CONSTANT      00003DFF          15871
+_BYTENUM                          EXTERNAL      00000000              0
+_CONFIG                           CONSTANT      00002007           8199
+_CPD_OFF                          CONSTANT      00003FFF          16383
+_CPD_ON                           CONSTANT      00003F7F          16255
+_CP_OFF                           CONSTANT      00003FFF          16383
+_CP_ON                            CONSTANT      00003FBF          16319
+_CRC16                            GLOBAL        00000000              0
+_CRCSUM                           EXTERNAL      00000000              0
+_DATAADDR                         EXTERNAL      00000000              0
+_DEVID1                           CONSTANT      00002006           8198
+_EC_OSC                           CONSTANT      00003FFB          16379
+_EXTRC                            CONSTANT      00003FFF          16383
+_EXTRCIO                          CONSTANT      00003FFE          16382
+_EXTRC_OSC_CLKOUT                 CONSTANT      00003FFF          16383
+_EXTRC_OSC_NOCLKOUT               CONSTANT      00003FFE          16382
+_FCMEN_OFF                        CONSTANT      000037FF          14335
+_FCMEN_ON                         CONSTANT      00003FFF          16383
+_FOSC_EC                          CONSTANT      00003FFB          16379
+_FOSC_EXTRCCLK                    CONSTANT      00003FFF          16383
+_FOSC_EXTRCIO                     CONSTANT      00003FFE          16382
+_FOSC_HS                          CONSTANT      00003FFA          16378
+_FOSC_INTRCCLK                    CONSTANT      00003FFD          16381
+_FOSC_INTRCIO                     CONSTANT      00003FFC          16380
+_FOSC_LP                          CONSTANT      00003FF8          16376
+_FOSC_XT                          CONSTANT      00003FF9          16377
+_HS_OSC                           CONSTANT      00003FFA          16378
+_IDLOC0                           CONSTANT      00002000           8192
+_IDLOC1                           CONSTANT      00002001           8193
+_IDLOC2                           CONSTANT      00002002           8194
+_IDLOC3                           CONSTANT      00002003           8195
+_IESO_OFF                         CONSTANT      00003BFF          15359
+_IESO_ON                          CONSTANT      00003FFF          16383
+_INTOSC                           CONSTANT      00003FFD          16381
+_INTOSCIO                         CONSTANT      00003FFC          16380
+_INTRC_OSC_CLKOUT                 CONSTANT      00003FFD          16381
+_INTRC_OSC_NOCLKOUT               CONSTANT      00003FFC          16380
+_LP_OSC                           CONSTANT      00003FF8          16376
+_MCLRE_OFF                        CONSTANT      00003FDF          16351
+gpasm-1.5.2 #1325 (Jul 12 2024) crc16_Clib.as   10/28/2026  05:58:31 PM     PAGE 15
+
+
+SYMBOL TABLE
+  LABEL                              TYPE        VALUE         VALUE          VALUE
+                                                 (hex)         (dec)          (text)
+
+_MCLRE_ON                         CONSTANT      00003FFF          16383
+_PWRTE_OFF                        CONSTANT      00003FFF          16383
+_PWRTE_ON                         CONSTANT      00003FEF          16367
+_WDTE_OFF                         CONSTANT      00003FF7          16375
+_WDTE_ON                          CONSTANT      00003FFF          16383
+_WDT_OFF                          CONSTANT      00003FF7          16375
+_WDT_ON                           CONSTANT      00003FFF          16383
+_XT_OSC                           CONSTANT      00003FF9          16377
+__14_BIT                          CONSTANT      00000001              1
+__16F690                          CONSTANT      00000001              1
+__ACTIVE_BANK_ADDR                VARIABLE      FFFFFFFF             -1
+__ACTIVE_PAGE_ADDR                VARIABLE      FFFFFFFF             -1
+__ASSUMED_BANK_ADDR               VARIABLE      FFFFFFFF             -1
+__BANK_0                          CONSTANT      00000000              0
+__BANK_1                          CONSTANT      00000080            128
+__BANK_2                          CONSTANT      00000100            256
+__BANK_3                          CONSTANT      00000180            384
+__BANK_BITS                       CONSTANT      00000180            384
+__BANK_FIRST                      CONSTANT      00000000              0
+__BANK_INV                        CONSTANT      FFFFFFFF             -1
+__BANK_LAST                       CONSTANT      00000180            384
+__BANK_MASK                       CONSTANT      0000007F            127
+__BANK_SHIFT                      CONSTANT      00000007              7
+__BANK_SIZE                       CONSTANT      00000080            128
+__CODE_END                        CONSTANT      00000FFF           4095
+__CODE_START                      CONSTANT      00000000              0
+__COMMON_RAM_END                  CONSTANT      0000007F            127
+__COMMON_RAM_START                CONSTANT      00000070            112
+__CONFIG_END                      CONSTANT      00002007           8199
+__CONFIG_START                    CONSTANT      00002007           8199
+__EEPROM_END                      CONSTANT      000021FF           8703
+__EEPROM_START                    CONSTANT      00002100           8448
+__GPUTILS_SVN_VERSION             CONSTANT      0000052D           1325
+__GPUTILS_VERSION_MAJOR           CONSTANT      00000001              1
+__GPUTILS_VERSION_MICRO           CONSTANT      00000002              2
+__GPUTILS_VERSION_MINOR           CONSTANT      00000005              5
+__IDLOCS_END                      CONSTANT      00002003           8195
+__IDLOCS_START                    CONSTANT      00002000           8192
+__NUM_BANKS                       CONSTANT      00000004              4
+__NUM_PAGES                       CONSTANT      00000002              2
+__PAGE_0                          CONSTANT      00000000              0
+__PAGE_1                          CONSTANT      00000800           2048
+__PAGE_BITS                       CONSTANT      00001800           6144
+__PAGE_FIRST                      CONSTANT      00000000              0
+__PAGE_INV                        CONSTANT      FFFFFFFF             -1
+__PAGE_LAST                       CONSTANT      00000800           2048
+__PAGE_MASK                       CONSTANT      000007FF           2047
+__PAGE_SHIFT                      CONSTANT      0000000B             11
+__PAGE_SIZE                       CONSTANT      00000800           2048
+__VECTOR_INT                      CONSTANT      00000004              4
+__VECTOR_RESET                    CONSTANT      00000000              0
+__WHILE_LOOP_COUNT_MAX            CONSTANT      000000FF            255
+
+gpasm-1.5.2 #1325 (Jul 12 2024) crc16_Clib.as   10/28/2026  05:58:31 PM     PAGE 16
+
+
+
+
+Errors   :     0
+Warnings :     4 reported,     0 suppressed
+Messages :     0 reported,     0 suppressed
+
+

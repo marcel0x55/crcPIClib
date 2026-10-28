@@ -1,0 +1,457 @@
+gplink-1.5.2 #1325 (Jul 12 2024)
+Copyright (c) 1998-2016 gputils project
+Listing File Generated: 10/28/2026  05:58:39 PM
+
+
+Address  Value    Disassembly              Source
+-------  -----    -----------              ------
+                                           ;--------------------------------------------------------
+                                           ; File Created by SDCC : free open source ISO C Compiler
+                                           ; Version 4.6.0 #16555 (Linux)
+                                           ;--------------------------------------------------------
+                                           ; PIC port for the 14-bit core
+                                           ;--------------------------------------------------------
+                                           ;	.file	"test.c"
+                                           	list	p=16f690
+                                           	radix dec
+                                           	include "p16f690.inc"
+                                                   LIST
+
+                                           ;==========================================================================
+                                           ; Build date : Oct 21 2015
+                                           ;  MPASM PIC16F690 processor include
+                                           ; 
+                                           ;  (c) Copyright 1999-2015 Microchip Technology, All rights reserved
+                                           ;==========================================================================
+
+                                                   NOLIST
+                                           ;--------------------------------------------------------
+                                           ; external declarations
+                                           ;--------------------------------------------------------
+                                           	extern	_CRC16
+                                           	extern	__sdcc_gsinit_startup
+                                           ;--------------------------------------------------------
+                                           ; global declarations
+                                           ;--------------------------------------------------------
+                                           	global	_main
+                                           	global	_rawbuffer
+                                           	global	_BYTENUM
+                                           	global	_DATAADDR
+                                           	global	_CRCSUM
+
+                                           	global PSAVE
+                                           	global SSAVE
+                                           	global WSAVE
+                                           	global STK12
+                                           	global STK11
+                                           	global STK10
+                                           	global STK09
+                                           	global STK08
+                                           	global STK07
+                                           	global STK06
+                                           	global STK05
+                                           	global STK04
+                                           	global STK03
+                                           	global STK02
+                                           	global STK01
+                                           	global STK00
+
+                                           sharebank udata_ovr 0x0070
+                                           PSAVE	res 1
+                                           SSAVE	res 1
+                                           WSAVE	res 1
+                                           STK12	res 1
+                                           STK11	res 1
+                                           STK10	res 1
+                                           STK09	res 1
+                                           STK08	res 1
+                                           STK07	res 1
+                                           STK06	res 1
+                                           STK05	res 1
+                                           STK04	res 1
+                                           STK03	res 1
+                                           STK02	res 1
+                                           STK01	res 1
+                                           STK00	res 1
+
+                                           ;--------------------------------------------------------
+                                           ; global definitions
+                                           ;--------------------------------------------------------
+                                           UD_test_0	udata
+                                           _CRCSUM	res	4
+
+                                           UD_test_1	udata
+                                           _DATAADDR	res	1
+
+                                           UD_test_2	udata
+                                           _BYTENUM	res	1
+
+                                           UD_test_3	udata
+                                           _rawbuffer	res	1
+
+                                           ;--------------------------------------------------------
+                                           ; absolute symbol definitions
+                                           ;--------------------------------------------------------
+                                           ;--------------------------------------------------------
+                                           ; compiler-defined variables
+                                           ;--------------------------------------------------------
+                                           ;--------------------------------------------------------
+                                           ; initialized data
+                                           ;--------------------------------------------------------
+                                           ;--------------------------------------------------------
+                                           ; initialized absolute data
+                                           ;--------------------------------------------------------
+                                           ;--------------------------------------------------------
+                                           ; overlayable items in internal ram 
+                                           ;--------------------------------------------------------
+                                           ;	udata_ovr
+                                           ;--------------------------------------------------------
+                                           ; reset vector 
+                                           ;--------------------------------------------------------
+                                           STARTUP	code 0x0000
+000000   0000     nop                      	nop
+000001   118a     bcf     0x0a, 0x3        	pagesel __sdcc_gsinit_startup
+000002   2803     goto    0x0003           	goto	__sdcc_gsinit_startup
+                                           ;--------------------------------------------------------
+                                           ; code
+                                           ;--------------------------------------------------------
+                                           code_test	code
+                                           ;***
+                                           ;  pBlock Stats: dbName = M
+                                           ;***
+                                           ;has an exit
+                                           ;functions called:
+                                           ;   _CRC16
+                                           ;   _CRC16
+                                           ;; Starting pCode block
+                                           S_test__main	code
+                                           _main:
+                                           ; 2 exit points
+                                           ;	.line	13; "test.c"	ptr[0] = 'C';
+000124   3040     movlw   0x40             	MOVLW	0x40
+000125   0084     movwf   0x04             	MOVWF	FSR
+000126   1383     bcf     0x03, 0x7        	BCF	STATUS,7
+000127   3043     movlw   0x43             	MOVLW	0x43
+000128   0080     movwf   0x00             	MOVWF	INDF
+                                           ;	.line	14; "test.c"	ptr[1] = 'I';
+000129   3041     movlw   0x41             	MOVLW	0x41
+00012a   0084     movwf   0x04             	MOVWF	FSR
+00012b   1383     bcf     0x03, 0x7        	BCF	STATUS,7
+00012c   3049     movlw   0x49             	MOVLW	0x49
+00012d   0080     movwf   0x00             	MOVWF	INDF
+                                           ;	.line	15; "test.c"	ptr[2] = 'P';
+00012e   3042     movlw   0x42             	MOVLW	0x42
+00012f   0084     movwf   0x04             	MOVWF	FSR
+000130   1383     bcf     0x03, 0x7        	BCF	STATUS,7
+000131   3050     movlw   0x50             	MOVLW	0x50
+000132   0080     movwf   0x00             	MOVWF	INDF
+                                           ;	.line	16; "test.c"	ptr[3] = 'o';
+000133   3043     movlw   0x43             	MOVLW	0x43
+000134   0084     movwf   0x04             	MOVWF	FSR
+000135   1383     bcf     0x03, 0x7        	BCF	STATUS,7
+000136   306f     movlw   0x6f             	MOVLW	0x6f
+000137   0080     movwf   0x00             	MOVWF	INDF
+                                           ;	.line	17; "test.c"	ptr[4] = 'l';
+000138   3044     movlw   0x44             	MOVLW	0x44
+000139   0084     movwf   0x04             	MOVWF	FSR
+00013a   1383     bcf     0x03, 0x7        	BCF	STATUS,7
+00013b   306c     movlw   0x6c             	MOVLW	0x6c
+00013c   0080     movwf   0x00             	MOVWF	INDF
+                                           ;	.line	18; "test.c"	ptr[5] = 'l';
+00013d   3045     movlw   0x45             	MOVLW	0x45
+00013e   0084     movwf   0x04             	MOVWF	FSR
+00013f   1383     bcf     0x03, 0x7        	BCF	STATUS,7
+000140   306c     movlw   0x6c             	MOVLW	0x6c
+000141   0080     movwf   0x00             	MOVWF	INDF
+                                           ;	.line	19; "test.c"	ptr[6] = 'e';
+000142   3046     movlw   0x46             	MOVLW	0x46
+000143   0084     movwf   0x04             	MOVWF	FSR
+000144   1383     bcf     0x03, 0x7        	BCF	STATUS,7
+000145   3065     movlw   0x65             	MOVLW	0x65
+000146   0080     movwf   0x00             	MOVWF	INDF
+                                           ;	.line	20; "test.c"	ptr[7] = 'h';
+000147   3047     movlw   0x47             	MOVLW	0x47
+000148   0084     movwf   0x04             	MOVWF	FSR
+000149   1383     bcf     0x03, 0x7        	BCF	STATUS,7
+00014a   3068     movlw   0x68             	MOVLW	0x68
+00014b   0080     movwf   0x00             	MOVWF	INDF
+                                           ;	.line	22; "test.c"	DATAADDR = (uint8_t)ptr;
+00014c   3040     movlw   0x40             	MOVLW	0x40
+00014d   1283     bcf     0x03, 0x5        	BANKSEL	_DATAADDR
+00014e   1303     bcf     0x03, 0x6        
+00014f   00b0     movwf   0x30             	MOVWF	_DATAADDR
+                                           ;	.line	24; "test.c"	BYTENUM = 7;
+000150   3007     movlw   0x07             	MOVLW	0x07
+000151   1283     bcf     0x03, 0x5        	BANKSEL	_BYTENUM
+000152   1303     bcf     0x03, 0x6        
+000153   00b1     movwf   0x31             	MOVWF	_BYTENUM
+                                           ;	.line	26; "test.c"	CRC16();
+000154   118a     bcf     0x0a, 0x3        	PAGESEL	_CRC16
+000155   209f     call    0x009f           	CALL	_CRC16
+000156   118a     bcf     0x0a, 0x3        	PAGESEL	$
+                                           _00106_DS_:
+                                           ;	.line	28; "test.c"	while(1);
+000157   2957     goto    0x0157           	GOTO	_00106_DS_
+                                           ;	.line	29; "test.c"	}
+000158   0008     return                   	RETURN	
+                                           ; exit point of _main
+
+
+                                           ;	code size estimation:
+                                           ;	   47+    4 =    51 instructions (  110 byte)
+
+                                           	end
+                                           #include "p16f690.inc"
+                                                   LIST
+
+                                           ;==========================================================================
+                                           ; Build date : Oct 21 2015
+                                           ;  MPASM PIC16F690 processor include
+                                           ; 
+                                           ;  (c) Copyright 1999-2015 Microchip Technology, All rights reserved
+                                           ;==========================================================================
+
+                                                   NOLIST
+
+                                           ;CONSTS
+                                           POLYLOW EQU 0X21
+                                           POLYHIGH EQU 0X10   ;CRC16 POLYNOMIAL VALUE
+                                            
+                                           INITLOW EQU 0XFF
+                                           INITHIGH EQU 0XFF   ;CRCSUM INIT VALUE
+
+
+                                           GLOBAL _CRC16
+
+                                           EXTERN _CRCSUM
+                                           EXTERN _DATAADDR
+                                           EXTERN _BYTENUM
+
+                                           PROG CODE
+
+                                           _CRC16:
+00009f   1283     bcf     0x03, 0x5        	BCF STATUS, RP0
+0000a0   1303     bcf     0x03, 0x6        	BCF STATUS, RP1
+0000a1   0831     movf    0x31, 0x0        	MOVF _BYTENUM, W
+0000a2   0730     addwf   0x30, 0x0            	ADDWF _DATAADDR, W
+0000a3   0084     movwf   0x04                 	MOVWF FSR
+                                               
+0000a4   30ff     movlw   0xff                 	MOVLW INITLOW
+0000a5   00ac     movwf   0x2c                 	MOVWF _CRCSUM
+0000a6   30ff     movlw   0xff                 	MOVLW INITHIGH
+0000a7   00ad     movwf   0x2d                 	MOVWF _CRCSUM+1
+                                               
+                                           BYTELOOP:
+0000a8   0800     movf    0x00, 0x0            	MOVF INDF,W
+0000a9   06ad     xorwf   0x2d, 0x1            	XORWF _CRCSUM+1,F
+0000aa   20b3     call    0x00b3               	CALL PROCESSBITS
+0000ab   0304     decf    0x04, 0x0            	DECF FSR,W
+0000ac   0084     movwf   0x04                 	MOVWF FSR
+0000ad   0230     subwf   0x30, 0x0            	SUBWF _DATAADDR,W
+0000ae   3c00     sublw   0x00             	SUBLW 0X00
+0000af   3e01     addlw   0x01             	ADDLW 0x01
+0000b0   1d03     btfss   0x03, 0x2            	BTFSS STATUS,Z
+0000b1   28a8     goto    0x00a8               	GOTO BYTELOOP
+                                               
+0000b2   0008     return                       	RETURN
+
+                                           PROCESSBITS:   
+0000b3   1fad     btfss   0x2d, 0x7            	BTFSS _CRCSUM+1,7
+0000b4   28be     goto    0x00be               	GOTO MSBC0
+                                               
+0000b5   1003     bcf     0x03, 0x0            	BCF STATUS,C
+0000b6   0dac     rlf     0x2c, 0x1            	RLF _CRCSUM,F
+0000b7   0dad     rlf     0x2d, 0x1            	RLF _CRCSUM+1,F
+0000b8   1003     bcf     0x03, 0x0            	BCF STATUS,C
+                                               
+0000b9   3021     movlw   0x21                	MOVLW POLYLOW
+0000ba   06ac     xorwf   0x2c, 0x1            	XORWF _CRCSUM,F
+0000bb   3010     movlw   0x10                 	MOVLW POLYHIGH
+0000bc   06ad     xorwf   0x2d, 0x1            	XORWF _CRCSUM+1,F
+                                               
+0000bd   28c1     goto    0x00c1               	GOTO DONEMSBS0
+                                               
+                                           MSBC0:
+0000be   1003     bcf     0x03, 0x0            	BCF STATUS,C
+0000bf   0dac     rlf     0x2c, 0x1           	RLF _CRCSUM,F
+0000c0   0dad     rlf     0x2d, 0x1            	RLF _CRCSUM+1,F
+
+                                           DONEMSBS0:
+
+0000c1   1fad     btfss   0x2d, 0x7            	BTFSS _CRCSUM+1,7
+0000c2   28cc     goto    0x00cc               	GOTO MSBC1
+                                               
+0000c3   1003     bcf     0x03, 0x0            	BCF STATUS,C
+0000c4   0dac     rlf     0x2c, 0x1            	RLF _CRCSUM,F
+0000c5   0dad     rlf     0x2d, 0x1            	RLF _CRCSUM+1,F
+0000c6   1003     bcf     0x03, 0x0            	BCF STATUS,C
+                                               
+0000c7   3021     movlw   0x21                	MOVLW POLYLOW
+0000c8   06ac     xorwf   0x2c, 0x1            	XORWF _CRCSUM,F
+0000c9   3010     movlw   0x10                 	MOVLW POLYHIGH
+0000ca   06ad     xorwf   0x2d, 0x1            	XORWF _CRCSUM+1,F
+                                               
+0000cb   28cf     goto    0x00cf               	GOTO DONEMSBS1
+                                               
+                                           MSBC1:
+0000cc   1003     bcf     0x03, 0x0            	BCF STATUS,C
+0000cd   0dac     rlf     0x2c, 0x1           	RLF _CRCSUM,F
+0000ce   0dad     rlf     0x2d, 0x1            	RLF _CRCSUM+1,F
+
+                                           DONEMSBS1:
+
+0000cf   1fad     btfss   0x2d, 0x7            	BTFSS _CRCSUM+1,7
+0000d0   28da     goto    0x00da               	GOTO MSBC2
+                                               
+0000d1   1003     bcf     0x03, 0x0            	BCF STATUS,C
+0000d2   0dac     rlf     0x2c, 0x1            	RLF _CRCSUM,F
+0000d3   0dad     rlf     0x2d, 0x1            	RLF _CRCSUM+1,F
+0000d4   1003     bcf     0x03, 0x0            	BCF STATUS,C
+                                               
+0000d5   3021     movlw   0x21                	MOVLW POLYLOW
+0000d6   06ac     xorwf   0x2c, 0x1            	XORWF _CRCSUM,F
+0000d7   3010     movlw   0x10                 	MOVLW POLYHIGH
+0000d8   06ad     xorwf   0x2d, 0x1            	XORWF _CRCSUM+1,F
+                                               
+0000d9   28dd     goto    0x00dd               	GOTO DONEMSBS2
+                                               
+                                           MSBC2:
+0000da   1003     bcf     0x03, 0x0            	BCF STATUS,C
+0000db   0dac     rlf     0x2c, 0x1           	RLF _CRCSUM,F
+0000dc   0dad     rlf     0x2d, 0x1            	RLF _CRCSUM+1,F
+
+                                           DONEMSBS2:
+
+0000dd   1fad     btfss   0x2d, 0x7            	BTFSS _CRCSUM+1,7
+0000de   28e8     goto    0x00e8               	GOTO MSBC3
+                                               
+0000df   1003     bcf     0x03, 0x0            	BCF STATUS,C
+0000e0   0dac     rlf     0x2c, 0x1            	RLF _CRCSUM,F
+0000e1   0dad     rlf     0x2d, 0x1            	RLF _CRCSUM+1,F
+0000e2   1003     bcf     0x03, 0x0            	BCF STATUS,C
+                                               
+0000e3   3021     movlw   0x21                	MOVLW POLYLOW
+0000e4   06ac     xorwf   0x2c, 0x1            	XORWF _CRCSUM,F
+0000e5   3010     movlw   0x10                 	MOVLW POLYHIGH
+0000e6   06ad     xorwf   0x2d, 0x1            	XORWF _CRCSUM+1,F
+                                               
+0000e7   28eb     goto    0x00eb               	GOTO DONEMSBS3
+                                               
+                                           MSBC3:
+0000e8   1003     bcf     0x03, 0x0            	BCF STATUS,C
+0000e9   0dac     rlf     0x2c, 0x1           	RLF _CRCSUM,F
+0000ea   0dad     rlf     0x2d, 0x1            	RLF _CRCSUM+1,F
+
+                                           DONEMSBS3:
+
+0000eb   1fad     btfss   0x2d, 0x7            	BTFSS _CRCSUM+1,7
+0000ec   28f6     goto    0x00f6               	GOTO MSBC4
+                                               
+0000ed   1003     bcf     0x03, 0x0            	BCF STATUS,C
+0000ee   0dac     rlf     0x2c, 0x1            	RLF _CRCSUM,F
+0000ef   0dad     rlf     0x2d, 0x1            	RLF _CRCSUM+1,F
+0000f0   1003     bcf     0x03, 0x0            	BCF STATUS,C
+                                               
+0000f1   3021     movlw   0x21                	MOVLW POLYLOW
+0000f2   06ac     xorwf   0x2c, 0x1            	XORWF _CRCSUM,F
+0000f3   3010     movlw   0x10                 	MOVLW POLYHIGH
+0000f4   06ad     xorwf   0x2d, 0x1            	XORWF _CRCSUM+1,F
+                                               
+0000f5   28f9     goto    0x00f9               	GOTO DONEMSBS4
+                                               
+                                           MSBC4:
+0000f6   1003     bcf     0x03, 0x0            	BCF STATUS,C
+0000f7   0dac     rlf     0x2c, 0x1           	RLF _CRCSUM,F
+0000f8   0dad     rlf     0x2d, 0x1            	RLF _CRCSUM+1,F
+
+                                           DONEMSBS4:
+
+0000f9   1fad     btfss   0x2d, 0x7            	BTFSS _CRCSUM+1,7
+0000fa   2904     goto    0x0104               	GOTO MSBC5
+                                               
+0000fb   1003     bcf     0x03, 0x0            	BCF STATUS,C
+0000fc   0dac     rlf     0x2c, 0x1            	RLF _CRCSUM,F
+0000fd   0dad     rlf     0x2d, 0x1            	RLF _CRCSUM+1,F
+0000fe   1003     bcf     0x03, 0x0            	BCF STATUS,C
+                                               
+0000ff   3021     movlw   0x21                	MOVLW POLYLOW
+000100   06ac     xorwf   0x2c, 0x1            	XORWF _CRCSUM,F
+000101   3010     movlw   0x10                 	MOVLW POLYHIGH
+000102   06ad     xorwf   0x2d, 0x1            	XORWF _CRCSUM+1,F
+                                               
+000103   2907     goto    0x0107               	GOTO DONEMSBS5
+                                               
+                                           MSBC5:
+000104   1003     bcf     0x03, 0x0            	BCF STATUS,C
+000105   0dac     rlf     0x2c, 0x1           	RLF _CRCSUM,F
+000106   0dad     rlf     0x2d, 0x1            	RLF _CRCSUM+1,F
+
+                                           DONEMSBS5:
+
+000107   1fad     btfss   0x2d, 0x7            	BTFSS _CRCSUM+1,7
+000108   2912     goto    0x0112               	GOTO MSBC6
+                                               
+000109   1003     bcf     0x03, 0x0            	BCF STATUS,C
+00010a   0dac     rlf     0x2c, 0x1            	RLF _CRCSUM,F
+00010b   0dad     rlf     0x2d, 0x1            	RLF _CRCSUM+1,F
+00010c   1003     bcf     0x03, 0x0            	BCF STATUS,C
+                                               
+00010d   3021     movlw   0x21                	MOVLW POLYLOW
+00010e   06ac     xorwf   0x2c, 0x1            	XORWF _CRCSUM,F
+00010f   3010     movlw   0x10                 	MOVLW POLYHIGH
+000110   06ad     xorwf   0x2d, 0x1            	XORWF _CRCSUM+1,F
+                                               
+000111   2915     goto    0x0115               	GOTO DONEMSBS6
+                                               
+                                           MSBC6:
+000112   1003     bcf     0x03, 0x0            	BCF STATUS,C
+000113   0dac     rlf     0x2c, 0x1           	RLF _CRCSUM,F
+000114   0dad     rlf     0x2d, 0x1            	RLF _CRCSUM+1,F
+
+                                           DONEMSBS6:
+
+000115   1fad     btfss   0x2d, 0x7            	BTFSS _CRCSUM+1,7
+000116   2920     goto    0x0120               	GOTO MSBC7
+                                               
+000117   1003     bcf     0x03, 0x0            	BCF STATUS,C
+000118   0dac     rlf     0x2c, 0x1            	RLF _CRCSUM,F
+000119   0dad     rlf     0x2d, 0x1            	RLF _CRCSUM+1,F
+00011a   1003     bcf     0x03, 0x0            	BCF STATUS,C
+                                               
+00011b   3021     movlw   0x21                	MOVLW POLYLOW
+00011c   06ac     xorwf   0x2c, 0x1            	XORWF _CRCSUM,F
+00011d   3010     movlw   0x10                 	MOVLW POLYHIGH
+00011e   06ad     xorwf   0x2d, 0x1            	XORWF _CRCSUM+1,F
+                                               
+00011f   2923     goto    0x0123               	GOTO DONEMSBS7
+                                               
+                                           MSBC7:
+000120   1003     bcf     0x03, 0x0            	BCF STATUS,C
+000121   0dac     rlf     0x2c, 0x1           	RLF _CRCSUM,F
+000122   0dad     rlf     0x2d, 0x1            	RLF _CRCSUM+1,F
+
+                                           DONEMSBS7:
+                                           	
+000123   0008     return                       	RETURN
+                                               
+                                               	END
+                                                   LIST
+
+                                           ;==========================================================================
+                                           ; Build date : Oct 21 2015
+                                           ;  MPASM PIC16F877 processor include
+                                           ; 
+                                           ;  (c) Copyright 1999-2015 Microchip Technology, All rights reserved
+                                           ;==========================================================================
+
+                                                   NOLIST
+                                                   LIST
+
+                                           ;==========================================================================
+                                           ; Build date : Oct 21 2015
+                                           ;  MPASM PIC16F690 processor include
+                                           ; 
+                                           ;  (c) Copyright 1999-2015 Microchip Technology, All rights reserved
+                                           ;==========================================================================
+
+                                                   NOLIST
